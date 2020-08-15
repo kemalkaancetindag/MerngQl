@@ -9,7 +9,7 @@ const {
 const { SECRET_KEY } = require("../../config");
 
 function generateToken(user) {
-  jwt.sign(
+  return jwt.sign(
     {
       id: user.id,
       email: user.email,
@@ -22,7 +22,7 @@ function generateToken(user) {
 
 module.exports = {
   Mutation: {
-    async login(parent, { loginInput: { username, password } }) {
+    async login(parent, { username, password }) {
       const { errors, valid } = validateLoginInput(username, password);
       const user = await User.findOne({ username });
 
@@ -39,7 +39,6 @@ module.exports = {
       }
 
       const token = generateToken(user);
-
       return {
         ...user._doc,
         id: user._id,
